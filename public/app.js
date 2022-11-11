@@ -13,12 +13,51 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var ajaxService = function ajaxService(term) {
-  var url = "http://www.omdbapi.com/?s=".concat(term, "&apikey=22174c4a");
+  var url = "http://www.omdbapi.com/?s=".concat(term, "&apikey=22174c4a&plot=full");
   return fetch(url).then(function (response) {
     return response.json();
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ajaxService);
+
+/***/ }),
+
+/***/ "./src/Modules/form.js":
+/*!*****************************!*\
+  !*** ./src/Modules/form.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var form = function form() {
+  return "\n    <div class=\"form-group mb-2\">\n        <input type=\"text\" placeholder=\"Filmo pavadinimas\" class=\"form-control term\">\n    </div>\n    \n    <button type=\"submit\" class=\"btn btn-primary\">Ieskoti filmo</button>\n    \n    ";
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (form);
+
+/***/ }),
+
+/***/ "./src/Modules/renderForm.js":
+/*!***********************************!*\
+  !*** ./src/Modules/renderForm.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _form__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./form */ "./src/Modules/form.js");
+
+var renderForm = function renderForm() {
+  var formElement = document.createElement('form');
+  formElement.className = 'form-inline';
+  formElement.innerHTML = (0,_form__WEBPACK_IMPORTED_MODULE_0__["default"])();
+  document.querySelector('.container .card-body').appendChild(formElement);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (renderForm);
 
 /***/ }),
 
@@ -34,24 +73,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _ajaxService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ajaxService */ "./src/Modules/ajaxService.js");
 
-/*
-const searchCode = () =>{
-    document.querySelector('form').addEventListener('sumbit', (event)=>{
-        event.preventDefault();
-        const searchTerm = document.querySelector('.term').value;
-        console.log(searchTerm);
-        let searchResponse;
-        ajaxService(searchTerm)
-            .then(result=>searchResponse=result)
-            .then(()=>console.log(searchResponse))
-
-    })
-}
-ajaxService('black panther')
-
-export default searchCode*/
-
-var container = document.querySelector('.container');
+var container = document.querySelector('.result');
 var searchMovie = function searchMovie() {
   document.querySelector('form').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -63,20 +85,40 @@ var searchMovie = function searchMovie() {
     })
     // .then(()=>console.log(searchResponse.Search))
     .then(function () {
-      var hElement = document.createElement('h3');
-      hElement.innerHTML = "Pasirinkite filma";
-      container.appendChild(hElement);
-      for (var i = 0; i < searchResponse.Search.length; i++) {
-        //document.querySelector(`.movie${i}`).remove
-        var movieDiv = document.createElement('div');
-        movieDiv.className = "movie".concat(i);
-        movieDiv.innerHTML = searchResponse.Search[i].Title + " " + searchResponse.Search[i].Year;
-        container.appendChild(movieDiv);
-        console.log(searchResponse.Search[i].Title);
+      if (!document.querySelector('.Pasirinkti')) {
+        var hElement = document.createElement('h3');
+        hElement.className = "Pasirinkti";
+        // hElement.innerHTML = "Pasirinkite filma"
+        container.appendChild(hElement);
+        for (var i = 0; i < searchResponse.Search.length; i++) {
+          var poster = document.createElement('img');
+          poster.src = searchResponse.Search[i].Poster;
+          var movieDiv = document.createElement('div');
+          movieDiv.className = "movie".concat(i);
+          container.appendChild(movieDiv);
+          movieDiv.innerHTML = searchResponse.Search[i].Title + " " + searchResponse.Search[i].Year;
+          //movieDiv.appendChild(poster);              
+          console.log(searchResponse.Search[i]);
+        }
       }
     });
+    /* .then(()=>{
+         for(let i = 0; i <  searchResponse.Search.length; i++){
+             document.querySelector(`.movie${i}`).addEventListener('click', ()=>{
+                 const year = searchResponse.Search[i].Year;
+                 const title = searchResponse.Search[i].Title;
+                 const url = `http://www.omdbapi.com/?apikey=22174c4a&t=${title}&y=${year}`
+                 let paieska;
+                 fetch(url)
+                     .then (res => res.json())
+                     .then(res => paieska = res)
+                     .then(console.log(paieska))
+             })
+         } 
+     })*/
   });
 };
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (searchMovie);
 
 /***/ }),
@@ -88,16 +130,15 @@ var searchMovie = function searchMovie() {
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Modules_ajaxService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Modules/ajaxService */ "./src/Modules/ajaxService.js");
-/* harmony import */ var _Modules_searchCode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Modules/searchCode */ "./src/Modules/searchCode.js");
+/* harmony import */ var _Modules_renderForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Modules/renderForm */ "./src/Modules/renderForm.js");
+/* harmony import */ var _Modules_ajaxService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Modules/ajaxService */ "./src/Modules/ajaxService.js");
+/* harmony import */ var _Modules_searchCode__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Modules/searchCode */ "./src/Modules/searchCode.js");
 
 
-(0,_Modules_searchCode__WEBPACK_IMPORTED_MODULE_1__["default"])();
-(0,_Modules_ajaxService__WEBPACK_IMPORTED_MODULE_0__["default"])('lord of the rings');
-function findMovies() {
-  var searchTerm = document.querySelector('.term').value.trim();
-  console.log(searchTerm);
-}
+
+(0,_Modules_renderForm__WEBPACK_IMPORTED_MODULE_0__["default"])();
+(0,_Modules_searchCode__WEBPACK_IMPORTED_MODULE_2__["default"])();
+(0,_Modules_ajaxService__WEBPACK_IMPORTED_MODULE_1__["default"])('lord of the rings');
 
 /***/ }),
 

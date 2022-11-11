@@ -1,22 +1,9 @@
 import ajaxService from "./ajaxService";
-/*
-const searchCode = () =>{
-    document.querySelector('form').addEventListener('sumbit', (event)=>{
-        event.preventDefault();
-        const searchTerm = document.querySelector('.term').value;
-        console.log(searchTerm);
-        let searchResponse;
-        ajaxService(searchTerm)
-            .then(result=>searchResponse=result)
-            .then(()=>console.log(searchResponse))
 
-    })
-}
-ajaxService('black panther')
 
-export default searchCode*/
+let container = document.querySelector('.result');
 
-let container = document.querySelector('.container');
+ 
 
 const searchMovie = () =>{
     document.querySelector('form').addEventListener('submit', (event)=>{
@@ -27,18 +14,39 @@ const searchMovie = () =>{
         ajaxService(searchTerm)
             .then(result=>searchResponse=result)            
            // .then(()=>console.log(searchResponse.Search))
-            .then(()=>{let hElement = document.createElement('h3');
-                    hElement.innerHTML = "Pasirinkite filma"
-                    container.appendChild(hElement)
-                for(let i = 0; i < searchResponse.Search.length; i++){
-                    //document.querySelector(`.movie${i}`).remove
+            .then(()=>{
+                if(!document.querySelector('.Pasirinkti')){
+                    let hElement = document.createElement('h3');
+                    hElement.className = "Pasirinkti"
+                   // hElement.innerHTML = "Pasirinkite filma"
+                    container.appendChild(hElement)                  
+                for(let i = 0; i < searchResponse.Search.length; i++){ 
+                    let poster = document.createElement('img'); 
+                    poster.src = searchResponse.Search[i].Poster;                                     
                     let movieDiv = document.createElement('div');
                     movieDiv.className = `movie${i}`;
+                    container.appendChild(movieDiv);                    
                     movieDiv.innerHTML = searchResponse.Search[i].Title + " " +searchResponse.Search[i].Year;
-                    container.appendChild(movieDiv);
-                    console.log(searchResponse.Search[i].Title);
-                }
+                    //movieDiv.appendChild(poster);              
+                    console.log(searchResponse.Search[i]);
+                    
+                }                              
+                }               
         })
+       /* .then(()=>{
+            for(let i = 0; i <  searchResponse.Search.length; i++){
+                document.querySelector(`.movie${i}`).addEventListener('click', ()=>{
+                    const year = searchResponse.Search[i].Year;
+                    const title = searchResponse.Search[i].Title;
+                    const url = `http://www.omdbapi.com/?apikey=22174c4a&t=${title}&y=${year}`
+                    let paieska;
+                    fetch(url)
+                        .then (res => res.json())
+                        .then(res => paieska = res)
+                        .then(console.log(paieska))
+                })
+            } 
+        })*/
             
     }) 
 }
