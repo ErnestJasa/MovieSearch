@@ -28,25 +28,22 @@ const searchMovie = () =>{
                     container.appendChild(movieDiv);                    
                     movieDiv.innerHTML = searchResponse.Search[i].Title + " " +searchResponse.Search[i].Year;
                     //movieDiv.appendChild(poster);              
-                    console.log(searchResponse.Search[i]);
+                    //console.log(searchResponse.Search[i]);
                     
                 }                              
                 }               
         })
-       /* .then(()=>{
+        .then(()=>{
             for(let i = 0; i <  searchResponse.Search.length; i++){
                 document.querySelector(`.movie${i}`).addEventListener('click', ()=>{
                     const year = searchResponse.Search[i].Year;
                     const title = searchResponse.Search[i].Title;
                     const url = `http://www.omdbapi.com/?apikey=22174c4a&t=${title}&y=${year}`
-                    let paieska;
-                    fetch(url)
-                        .then (res => res.json())
-                        .then(res => paieska = res)
-                        .then(console.log(paieska))
+                    console.log(url);
+                    
                 })
             } 
-        })*/
+        })
             
     }) 
 }

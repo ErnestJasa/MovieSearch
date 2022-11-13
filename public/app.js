@@ -98,27 +98,24 @@ var searchMovie = function searchMovie() {
           container.appendChild(movieDiv);
           movieDiv.innerHTML = searchResponse.Search[i].Title + " " + searchResponse.Search[i].Year;
           //movieDiv.appendChild(poster);              
-          console.log(searchResponse.Search[i]);
+          //console.log(searchResponse.Search[i]);
         }
       }
+    }).then(function () {
+      var _loop = function _loop(i) {
+        document.querySelector(".movie".concat(i)).addEventListener('click', function () {
+          var year = searchResponse.Search[i].Year;
+          var title = searchResponse.Search[i].Title;
+          var url = "http://www.omdbapi.com/?apikey=22174c4a&t=".concat(title, "&y=").concat(year);
+          console.log(url);
+        });
+      };
+      for (var i = 0; i < searchResponse.Search.length; i++) {
+        _loop(i);
+      }
     });
-    /* .then(()=>{
-         for(let i = 0; i <  searchResponse.Search.length; i++){
-             document.querySelector(`.movie${i}`).addEventListener('click', ()=>{
-                 const year = searchResponse.Search[i].Year;
-                 const title = searchResponse.Search[i].Title;
-                 const url = `http://www.omdbapi.com/?apikey=22174c4a&t=${title}&y=${year}`
-                 let paieska;
-                 fetch(url)
-                     .then (res => res.json())
-                     .then(res => paieska = res)
-                     .then(console.log(paieska))
-             })
-         } 
-     })*/
   });
 };
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (searchMovie);
 
 /***/ }),
