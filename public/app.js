@@ -39,6 +39,26 @@ var form = function form() {
 
 /***/ }),
 
+/***/ "./src/Modules/getMovieData.js":
+/*!*************************************!*\
+  !*** ./src/Modules/getMovieData.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function getMovieData(movieTitle, movieYear) {
+  var url = "http://www.omdbapi.com/?apikey=22174c4a&t=".concat(movieTitle, "&y=").concat(movieYear);
+  return fetch(url).then(function (response) {
+    return response.json();
+  });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (getMovieData);
+
+/***/ }),
+
 /***/ "./src/Modules/renderForm.js":
 /*!***********************************!*\
   !*** ./src/Modules/renderForm.js ***!
@@ -72,6 +92,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _ajaxService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ajaxService */ "./src/Modules/ajaxService.js");
+/* harmony import */ var _getMovieData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getMovieData */ "./src/Modules/getMovieData.js");
+
 
 var container = document.querySelector('.result');
 var searchMovie = function searchMovie() {
@@ -85,29 +107,37 @@ var searchMovie = function searchMovie() {
     })
     // .then(()=>console.log(searchResponse.Search))
     .then(function () {
-      if (!document.querySelector('.Pasirinkti')) {
-        var hElement = document.createElement('h3');
-        hElement.className = "Pasirinkti";
-        // hElement.innerHTML = "Pasirinkite filma"
-        container.appendChild(hElement);
-        for (var i = 0; i < searchResponse.Search.length; i++) {
-          var poster = document.createElement('img');
-          poster.src = searchResponse.Search[i].Poster;
-          var movieDiv = document.createElement('div');
-          movieDiv.className = "movie".concat(i);
-          container.appendChild(movieDiv);
-          movieDiv.innerHTML = searchResponse.Search[i].Title + " " + searchResponse.Search[i].Year;
-          //movieDiv.appendChild(poster);              
-          //console.log(searchResponse.Search[i]);
-        }
+      var hElement = document.createElement('h3');
+      hElement.innerHTML = "Pasirinkite filma";
+      container.appendChild(hElement);
+      for (var i = 0; i < searchResponse.Search.length; i++) {
+        var poster = document.createElement('img');
+        poster.src = searchResponse.Search[i].Poster;
+        var movieDiv = document.createElement('div');
+        var movieH = document.createElement('h5');
+        movieDiv.className = "movie".concat(i);
+        container.appendChild(movieDiv);
+        movieH.innerHTML = searchResponse.Search[i].Title + " " + searchResponse.Search[i].Year;
+        movieDiv.appendChild(movieH);
       }
     }).then(function () {
       var _loop = function _loop(i) {
+        var plotP = document.createElement('p');
         document.querySelector(".movie".concat(i)).addEventListener('click', function () {
           var year = searchResponse.Search[i].Year;
           var title = searchResponse.Search[i].Title;
-          var url = "http://www.omdbapi.com/?apikey=22174c4a&t=".concat(title, "&y=").concat(year);
-          console.log(url);
+          var movieData;
+          var plot;
+          (0,_getMovieData__WEBPACK_IMPORTED_MODULE_1__["default"])(title, year).then(function (result) {
+            return movieData = result;
+          }).then(function () {
+            return plot = movieData.Plot;
+          })
+          //.then(()=>console.log(plot))
+          .then(function () {
+            plotP.innerHTML = "Movie plot: ".concat(plot);
+            document.querySelector(".movie".concat(i)).appendChild(plotP);
+          });
         });
       };
       for (var i = 0; i < searchResponse.Search.length; i++) {
